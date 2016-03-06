@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ED3CE211-4C04-4A46-9346-816EBBA1B07F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>face_recognition</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\target\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\target\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\third\boost_1_58_0\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(OutDir)\lib\face_recognition_lib.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\zlibd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\ippicvmt.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libjpegd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libwebpd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libpngd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libtiffd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libjasperd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\IlmImfd.lib;vfw32.lib;comctl32.lib;setupapi.lib;ws2_32.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\opencv_face310d.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\opencv_world310d.lib;..\..\third\flandmark-master\build\win\$(Configuration)\lib\flandmark_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)\exec\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>..\..\third\boost_1_58_0\stage\lib</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>$(OutDir)\pdb\$(TargetName).pdb</ProgramDatabaseFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>after_build.bat debug</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\third\boost_1_58_0\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>$(OutDir)\lib\face_recognition_lib.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\zlibd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\ippicvmt.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libjpegd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libwebpd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libpngd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libtiffd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\libjasperd.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\IlmImfd.lib;vfw32.lib;comctl32.lib;setupapi.lib;ws2_32.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\opencv_face310d.lib;..\..\third\opencv-3.1.0\build\win\$(Configuration)\lib\opencv_world310d.lib;..\..\third\flandmark-master\build\win\$(Configuration)\lib\flandmark_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)\exec\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>..\..\third\boost_1_58_0\stage\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\face_recognition\main.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

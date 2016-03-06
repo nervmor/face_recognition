@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9C47D1A0-6492-43CB-9979-3C20C71B4638}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>face_recognition_lib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(OutDir)\obj\$(ProjectName)\</IntDir>
+    <OutDir>..\..\target\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\target\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\third\boost_1_58_0\;..\..\third\opencv-3.1.0\include;..\..\third\opencv-3.1.0\3rdparty\ippicv\unpack\ippicv_win\include;..\..\third\opencv-3.1.0\opencv_contrib-master\modules\face\include;..\..\third\opencv-3.1.0\modules\core\include;..\..\third\opencv-3.1.0\modules\cudaarithm\include;..\..\third\opencv-3.1.0\modules\flann\include;..\..\third\opencv-3.1.0\modules\imgproc\include;..\..\third\opencv-3.1.0\modules\ml\include;..\..\third\opencv-3.1.0\modules\video\include;..\..\third\opencv-3.1.0\modules\cudabgsegm\include;..\..\third\opencv-3.1.0\modules\cudafilters\include;..\..\third\opencv-3.1.0\modules\cudaimgproc\include;..\..\third\opencv-3.1.0\modules\cudawarping\include;..\..\third\opencv-3.1.0\modules\imgcodecs\include;..\..\third\opencv-3.1.0\modules\photo\include;..\..\third\opencv-3.1.0\modules\shape\include;..\..\third\opencv-3.1.0\modules\videoio\include;..\..\third\opencv-3.1.0\modules\cudacodec\include;..\..\third\opencv-3.1.0\modules\cudaoptflow\include;..\..\third\opencv-3.1.0\modules\highgui\include;..\..\third\opencv-3.1.0\modules\objdetect\include;..\..\third\opencv-3.1.0\modules\superres\include;..\..\third\opencv-3.1.0\modules\cudaobjdetect\include;..\..\third\opencv-3.1.0\modules\features2d\include;..\..\third\opencv-3.1.0\modules\calib3d\include;..\..\third\opencv-3.1.0\modules\cudafeatures2d\include;..\..\third\opencv-3.1.0\modules\cudastereo\include;..\..\third\opencv-3.1.0\modules\stitching\include;..\..\third\opencv-3.1.0\modules\videostab\include;..\..\third\opencv-3.1.0\modules\world\include;..\..\third\flandmark-master\libflandmark;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>..\..\third\boost_1_58_0\stage\lib\libboost_chrono-vc80-mt-sgd-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_date_time-vc80-mt-sgd-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_filesystem-vc80-mt-sgd-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_locale-vc80-mt-sgd-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_system-vc80-mt-sgd-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_thread-vc80-mt-sgd-1_58.lib;..\..\third\opencv-3.1.0\build\win\debug\lib\opencv_face310d.lib;..\..\third\opencv-3.1.0\build\win\debug\lib\opencv_world310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Lib>
+      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\third\boost_1_58_0\;..\..\third\opencv-3.1.0\3rdparty\ippicv\unpack\ippicv_win\include;..\..\third\opencv-3.1.0\opencv_contrib-master\modules\face\include;..\..\third\opencv-3.1.0\modules\core\include;..\..\third\opencv-3.1.0\modules\cudaarithm\include;..\..\third\opencv-3.1.0\modules\flann\include;..\..\third\opencv-3.1.0\modules\imgproc\include;..\..\third\opencv-3.1.0\modules\ml\include;..\..\third\opencv-3.1.0\modules\video\include;..\..\third\opencv-3.1.0\modules\cudabgsegm\include;..\..\third\opencv-3.1.0\modules\cudafilters\include;..\..\third\opencv-3.1.0\modules\cudaimgproc\include;..\..\third\opencv-3.1.0\modules\cudawarping\include;..\..\third\opencv-3.1.0\modules\imgcodecs\include;..\..\third\opencv-3.1.0\modules\photo\include;..\..\third\opencv-3.1.0\modules\shape\include;..\..\third\opencv-3.1.0\modules\videoio\include;..\..\third\opencv-3.1.0\modules\cudacodec\include;..\..\third\opencv-3.1.0\modules\cudaoptflow\include;..\..\third\opencv-3.1.0\modules\highgui\include;..\..\third\opencv-3.1.0\modules\objdetect\include;..\..\third\opencv-3.1.0\modules\superres\include;..\..\third\opencv-3.1.0\modules\cudaobjdetect\include;..\..\third\opencv-3.1.0\modules\features2d\include;..\..\third\opencv-3.1.0\modules\calib3d\include;..\..\third\opencv-3.1.0\modules\cudafeatures2d\include;..\..\third\opencv-3.1.0\modules\cudastereo\include;..\..\third\opencv-3.1.0\modules\stitching\include;..\..\third\opencv-3.1.0\modules\videostab\include;..\..\third\opencv-3.1.0\modules\world\include;..\..\third\flandmark-master\libflandmark;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>..\..\third\boost_1_58_0\stage\lib\libboost_chrono-vc80-mt-s-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_date_time-vc80-mt-s-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_filesystem-vc80-mt-s-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_locale-vc80-mt-s-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_system-vc80-mt-s-1_58.lib;..\..\third\boost_1_58_0\stage\lib\libboost_thread-vc80-mt-s-1_58.lib;..\..\third\opencv-3.1.0\build\win\release\lib\opencv_face310d.lib;..\..\third\opencv-3.1.0\build\win\release\lib\opencv_world310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Lib>
+      <OutputFile>$(OutDir)\lib\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\face_recognition_lib\blur_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\context.h" />
+    <ClInclude Include="..\..\face_recognition_lib\scheme.h" />
+    <ClInclude Include="..\..\face_recognition_lib\define.h" />
+    <ClInclude Include="..\..\face_recognition_lib\edge_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\equalization_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\eyes_postion_align_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\face_area_detect_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\face_contour_mask_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\gray_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\picture.h" />
+    <ClInclude Include="..\..\face_recognition_lib\misc.h" />
+    <ClInclude Include="..\..\face_recognition_lib\preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\preprocessor_manager.h" />
+    <ClInclude Include="..\..\face_recognition_lib\preprocess_common.h" />
+    <ClInclude Include="..\..\face_recognition_lib\session.h" />
+    <ClInclude Include="..\..\face_recognition_lib\size_align_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\train_task_creator.h" />
+    <ClInclude Include="..\..\face_recognition_lib\threshold_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\train_task.h" />
+    <ClInclude Include="..\..\frame\include.h" />
+    <ClInclude Include="..\..\frame\macro.h" />
+    <ClInclude Include="..\..\frame\singleton.h" />
+    <ClInclude Include="..\..\frame\util_buffer.h" />
+    <ClInclude Include="..\..\frame\util_cache.h" />
+    <ClInclude Include="..\..\frame\util_log.h" />
+    <ClInclude Include="..\..\frame\util_path.h" />
+    <ClInclude Include="..\..\frame\util_string.h" />
+    <ClInclude Include="..\..\frame\util_time.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\face_recognition_lib\scheme.cpp" />
+    <ClCompile Include="..\..\face_recognition_lib\global.cpp" />
+    <ClCompile Include="..\..\face_recognition_lib\picture.cpp" />
+    <ClCompile Include="..\..\face_recognition_lib\preprocessor_manager.cpp" />
+    <ClCompile Include="..\..\face_recognition_lib\session.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

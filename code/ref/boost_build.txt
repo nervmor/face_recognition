@@ -1,0 +1,1 @@
+bjam.exe stage link=static runtime-link=static threading=multi debug release --with-date_time --with-thread --with-filesystem --with-locale

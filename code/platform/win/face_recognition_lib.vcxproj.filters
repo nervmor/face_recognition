@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="frame">
+      <UniqueIdentifier>{270a7ac9-e387-4548-b0d7-b1a22f83c318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="preprocessor">
+      <UniqueIdentifier>{c3707844-2fb5-4002-a9b1-c462f40e0e41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\face_recognition_lib\picture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\session.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\train_task.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\include.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\macro.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\singleton.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\util_buffer.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\util_cache.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\util_log.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\util_path.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\util_string.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\frame\util_time.h">
+      <Filter>frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\size_align_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\gray_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\face_area_detect_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\eyes_postion_align_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\equalization_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\preprocessor_manager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\misc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\preprocess_common.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\edge_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\blur_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\face_contour_mask_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\threshold_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\train_task_creator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\scheme.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\face_recognition_lib\picture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\face_recognition_lib\session.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\face_recognition_lib\global.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\face_recognition_lib\preprocessor_manager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\face_recognition_lib\scheme.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

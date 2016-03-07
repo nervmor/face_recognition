@@ -22,3 +22,8 @@
 #define FACE_ALIGN_PREPROCESSOR_TAG					"face_align_preprocessor"
 #define SIZE_ALIGN_PREPROCESSOR_TAG					"size_align_preprocessor"
 #define FACE_COUNTOUR_MASK_PREPROCESSOR_TAG			"face_contour_mask_preprocessor"
+
+
+
+
+#define FACE_AREA_RECT								L"face_area_rect"

@@ -97,13 +97,15 @@ namespace face_recognition
 			util_log::logd(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "detect face area count[%d], then get the biggest area[%lld] postion[%d,%d,%d,%d]to cut", 
 				vec_face_rect.size(), max_acreage, max_acreage_rect._x, max_acreage_rect._y, max_acreage_rect._x + max_acreage_rect._width, max_acreage_rect._y + max_acreage_rect._height);
 
-			
-			res = picture_handler::cut(sp_pic_in, max_acreage_rect._x, max_acreage_rect._y, max_acreage_rect._width, max_acreage_rect._height, sp_pic_out);
-			if (res != result_success)
-			{
-				util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "cut picture by max face area fail with result[%s].", result_string(res));
-				return res;
-			}
+			boost::shared_ptr<pic_rect> sp_rect(boost::make_shared<pic_rect>(max_acreage_rect._x, max_acreage_rect._y, max_acreage_rect._width, max_acreage_rect._height));
+			sp_ctx->set_value(FACE_AREA_RECT, sp_rect);
+
+// 			res = picture_handler::cut(sp_pic_in, max_acreage_rect._x, max_acreage_rect._y, max_acreage_rect._width, max_acreage_rect._height, sp_pic_out);
+// 			if (res != result_success)
+// 			{
+// 				util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "cut picture by max face area fail with result[%s].", result_string(res));
+// 				return res;
+// 			}
 			
 			sp_ctx->set_bool_value(FACE_AREA_DETECT_STATE, true);
 			util_log::logd(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "detect_face_area success and set context [%ws] to true.", FACE_AREA_DETECT_STATE);

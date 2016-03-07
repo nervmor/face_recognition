@@ -31,8 +31,15 @@ namespace face_recognition
 				util_log::log(FACE_ALIGN_PREPROCESSOR_TAG, "face_feature_detector create fail with result[%s]", result_string(res));
 				return res;
 			}
+			boost::shared_ptr<pic_rect> sp_rect;
+			res = sp_ctx->get_value(FACE_AREA_RECT, sp_rect);
+			if (res != result_success)
+			{
+				util_log::log(FACE_ALIGN_PREPROCESSOR_TAG, "unable to detects face feature for geting [%ws] fail.", FACE_AREA_RECT);
+				return res;
+			}
 			boost::shared_ptr<face_feature> sp_feature;
-			res = sp_detector->detect_feature(sp_pic_in, sp_feature);
+			res = sp_detector->detect_feature(sp_pic_in, *sp_rect.get(), sp_feature);
 			if (res != result_success)
 			{
 				util_log::log(FACE_ALIGN_PREPROCESSOR_TAG, "detect_feature fail with result[%s]", result_string(res));

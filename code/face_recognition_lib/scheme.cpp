@@ -30,7 +30,7 @@ namespace face_recognition
 		sp_mgr->add_preprocessor(sp_gray_preprocessor);
 		sp_mgr->add_preprocessor(sp_equalization_preprocessor);
 		sp_mgr->add_preprocessor(sp_face_area_detect_preprocessor);
-		sp_mgr->add_preprocessor(sp_size_align_preprocessor);
+		//sp_mgr->add_preprocessor(sp_size_align_preprocessor);
 		sp_mgr->add_preprocessor(sp_face_align_preprocessor);
 		//sp_mgr->add_preprocessor(sp_face_contour_mask_preprocessor);
 

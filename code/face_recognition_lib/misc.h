@@ -346,13 +346,19 @@ namespace face_recognition
 			}
 		}
 	
-		result detect_feature(boost::shared_ptr<picture> sp_pic, boost::shared_ptr<face_feature>& sp_feature)
+		result detect_feature(boost::shared_ptr<picture> sp_pic, const pic_rect& face_rect, boost::shared_ptr<face_feature>& sp_feature)
 		{
 			int *bbox = new int(4 * sizeof(int));
+			bbox[0] = face_rect._x;
+			bbox[1] = face_rect._y;
+			bbox[2] = face_rect._x + face_rect._width;
+			bbox[3] = face_rect._y + face_rect._height;
 			double *landmarks = new double(2 * m_p_model->data.options.M*sizeof(double));
 			boost::shared_array<int> sp_bbox(bbox);
 			boost::shared_array<double> sp_landmarks(landmarks);
 			IplImage img(sp_pic->image());
+			cv::imshow("s",sp_pic->data());
+			cv::waitKey();
 			if (0 != flandmark_detect(&img, bbox, m_p_model, landmarks))
 			{
 				util_log::log(FACE_FEATURE_DETECTOR_TAG, "flandmark_detect get no face feature.");

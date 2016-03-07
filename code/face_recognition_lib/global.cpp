@@ -14,7 +14,9 @@ namespace face_recognition
 			"result_picture_invalid",
 			"result_train_repeated",
 			"result_already_handled",
-			"result_no_face_detected"
+			"result_no_face_detected",
+			"result_lib_fail",
+			"result_no_face_feature_fetected"
 		};
 		return s_result_string[(unsigned int)res];
 	}

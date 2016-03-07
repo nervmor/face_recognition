@@ -18,6 +18,7 @@ namespace face_recognition
 		unsigned int channels();
 		unsigned int depth();
 		cv::Mat& data();
+		IplImage image();
 	private:
 		cv::Mat m_data;
 	public:

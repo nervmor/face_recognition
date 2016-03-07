@@ -37,6 +37,11 @@ namespace face_recognition
 		return m_data;
 	}
 
+	IplImage picture::image()
+	{
+		return IplImage(m_data);
+	}
+
 	unsigned int picture::channels()
 	{
 		return m_data.channels();

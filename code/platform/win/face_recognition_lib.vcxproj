@@ -108,7 +108,7 @@
     <ClInclude Include="..\..\face_recognition_lib\define.h" />
     <ClInclude Include="..\..\face_recognition_lib\edge_preprocessor.h" />
     <ClInclude Include="..\..\face_recognition_lib\equalization_preprocessor.h" />
-    <ClInclude Include="..\..\face_recognition_lib\eyes_postion_align_preprocessor.h" />
+    <ClInclude Include="..\..\face_recognition_lib\face_align_preprocessor.h" />
     <ClInclude Include="..\..\face_recognition_lib\face_area_detect_preprocessor.h" />
     <ClInclude Include="..\..\face_recognition_lib\face_contour_mask_preprocessor.h" />
     <ClInclude Include="..\..\face_recognition_lib\gray_preprocessor.h" />

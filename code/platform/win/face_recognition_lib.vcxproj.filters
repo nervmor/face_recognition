@@ -72,9 +72,6 @@
     <ClInclude Include="..\..\face_recognition_lib\face_area_detect_preprocessor.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\face_recognition_lib\eyes_postion_align_preprocessor.h">
-      <Filter>preprocessor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\face_recognition_lib\equalization_preprocessor.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
@@ -107,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="..\..\face_recognition_lib\scheme.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\face_align_preprocessor.h">
+      <Filter>preprocessor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

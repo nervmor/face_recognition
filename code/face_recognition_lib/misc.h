@@ -30,6 +30,16 @@ namespace face_recognition
 			: _x(x)
 			, _y(y)
 		{}
+		pic_point(const pic_point& pt)
+			: _x(pt._x)
+			, _y(pt._y)
+		{}
+		pic_point operator =(const pic_point& pt)
+		{
+			_x = pt._x;
+			_y = pt._y;
+			return *this;
+		}
 	};
 	struct pic_rect
 	{
@@ -68,6 +78,40 @@ namespace face_recognition
 				contour.push_back(cv::Point(pic_pt._x, pic_pt._y));
 			}
 			return cv::contourArea(contour);
+		}
+	};
+	struct face_feature
+	{
+		pic_point _left_eye_left;
+		pic_point _left_eye_right;
+		pic_point _right_eye_left;
+		pic_point _right_eye_right;
+		pic_point _left_nose;
+		pic_point _right_nose;
+		pic_point _left_mouth;
+		pic_point _right_mouth;
+
+
+		face_feature(double landmarks[])
+			: _left_eye_left(static_cast<int>(landmarks[5 * 2]), static_cast<int>(landmarks[5 * 2 + 1])),
+			_left_eye_right(static_cast<int>(landmarks[1 * 2]), static_cast<int>(landmarks[1 * 2 + 1])),
+			_right_eye_left(static_cast<int>(landmarks[2 * 2]), static_cast<int>(landmarks[2 * 2 + 1])),
+			_right_eye_right(static_cast<int>(landmarks[6 * 2]), static_cast<int>(landmarks[6 * 2 + 1])),
+			_left_nose(static_cast<int>(landmarks[0 * 2]), static_cast<int>(landmarks[0 * 2 + 1])),
+			_right_nose(static_cast<int>(landmarks[7 * 2]), static_cast<int>(landmarks[7 * 2 + 1])),
+			_left_mouth(static_cast<int>(landmarks[3 * 2]), static_cast<int>(landmarks[3 * 2 + 1])),
+			_right_mouth(static_cast<int>(landmarks[4 * 2]), static_cast<int>(landmarks[4 * 2 + 1]))
+		{
+			/*
+			*    5   1    2   6
+			*
+			*
+			*          0/7
+			*
+			*
+			*       3       4
+			*
+			*/
 		}
 	};
 	class picture_handler
@@ -280,7 +324,63 @@ namespace face_recognition
 
 	class face_feature_detector
 	{
+	public:
+		static result create(const std::wstring& str_flandmark_model_file, boost::shared_ptr<face_feature_detector>& sp_detector)
+		{
+			boost::shared_ptr<face_feature_detector>& sp_detector_x = boost::make_shared<face_feature_detector>();
 
+			sp_detector_x->m_p_model = flandmark_init(util_string::w2a(str_flandmark_model_file).c_str());
+			if (sp_detector_x->m_p_model == NULL)
+			{
+				util_log::log(FACE_FEATURE_DETECTOR_TAG, "flandmark_init fail.");
+				return result_lib_fail;
+			}
+			sp_detector = sp_detector_x;
+			return result_success;
+		}
+		void destroy()
+		{
+			if (m_p_model != NULL)
+			{
+				flandmark_free(m_p_model);
+			}
+		}
+	
+		result detect_feature(boost::shared_ptr<picture> sp_pic, boost::shared_ptr<face_feature>& sp_feature)
+		{
+			int *bbox = new int(4 * sizeof(int));
+			double *landmarks = new double(2 * m_p_model->data.options.M*sizeof(double));
+			boost::shared_array<int> sp_bbox(bbox);
+			boost::shared_array<double> sp_landmarks(landmarks);
+			IplImage img(sp_pic->image());
+			if (0 != flandmark_detect(&img, bbox, m_p_model, landmarks))
+			{
+				util_log::log(FACE_FEATURE_DETECTOR_TAG, "flandmark_detect get no face feature.");
+				return result_no_face_feature_fetected;
+			}
+			/*
+			*    5   1    2   6
+			*
+			*
+			*          0/7
+			*
+			*
+			*       3       4
+			*
+			*/
+			sp_feature = boost::make_shared<face_feature>(landmarks);
+			return result_success;
+		}
+	public:
+		face_feature_detector()
+			: m_p_model(NULL)
+		{}
+		~face_feature_detector()
+		{
+			destroy();
+		}
+	private:
+		FLANDMARK_Model* m_p_model;
 	};
 
 	class model_recognizer

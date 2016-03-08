@@ -45,8 +45,9 @@ namespace face_recognition
 				util_log::log(FACE_ALIGN_PREPROCESSOR_TAG, "detect_feature fail with result[%s]", result_string(res));
 				return res;
 			}
-			cv::Point2f leftEye(cv::Point((sp_feature->_left_eye_right._x - sp_feature->_left_eye_left._x) / 2, (sp_feature->_left_eye_right._y - sp_feature->_left_eye_left._y) / 2));
-			cv::Point2f rightEye(cv::Point((sp_feature->_right_eye_right._x - sp_feature->_right_eye_left._x) / 2, (sp_feature->_right_eye_right._y - sp_feature->_right_eye_left._y) / 2));
+
+			cv::Point2f leftEye(cv::Point((sp_feature->_left_eye_right._x + sp_feature->_left_eye_left._x) / 2, (sp_feature->_left_eye_right._y + sp_feature->_left_eye_left._y) / 2));
+			cv::Point2f rightEye(cv::Point((sp_feature->_right_eye_right._x + sp_feature->_right_eye_left._x) / 2, (sp_feature->_right_eye_right._y + sp_feature->_right_eye_left._y) / 2));
 
 			// 获取两眼中心点 Get the center between the 2 eyes.
 			cv::Point2f eyesCenter;
@@ -64,15 +65,15 @@ namespace face_recognition
 			const double DESIRED_RIGHT_EYE_X = (1.0f - 0.16);
 			// Get the amount we need to scale the image to be the desired
 			// fixed size we want.
-			const int DESIRED_FACE_WIDTH = 70;
-			const int DESIRED_FACE_HEIGHT = 70;
+			const int DESIRED_FACE_WIDTH = m_align_size;
+			const int DESIRED_FACE_HEIGHT = m_align_size;
 			double desiredLen = (DESIRED_RIGHT_EYE_X - 0.16);
 			double scale = desiredLen * DESIRED_FACE_WIDTH / len;
 
 			// Get the transformation matrix for the desired angle & size.
 			cv::Mat rot_mat = getRotationMatrix2D(eyesCenter, angle, scale);
 			// Shift the center of the eyes to be the desired center.
-			const int DESIRED_LEFT_EYE_Y = 0.14;
+			const double DESIRED_LEFT_EYE_Y = 0.16;
 			double ex = DESIRED_FACE_WIDTH * 0.5f - eyesCenter.x;
 			double ey = DESIRED_FACE_HEIGHT * DESIRED_LEFT_EYE_Y - eyesCenter.y;
 			rot_mat.at<double>(0, 2) += ex;
@@ -89,8 +90,9 @@ namespace face_recognition
 			return result_success;
 		}
 	public:
-		face_align_preprocessor(const std::wstring& str_flandmark_model_file)
+		face_align_preprocessor(const std::wstring& str_flandmark_model_file, unsigned int align_size)
 			: m_str_flandmark_model_file(str_flandmark_model_file)
+			, m_align_size(align_size)
 		{
 			
 		}
@@ -98,5 +100,6 @@ namespace face_recognition
 		{}
 	private:
 		std::wstring m_str_flandmark_model_file;
+		unsigned int m_align_size;
 	};
 }

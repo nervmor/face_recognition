@@ -62,15 +62,15 @@ namespace face_recognition
 			{
 				util_log::log(SESSION_TAG, "train picture fail. preprocess manager process it fail with result[%s]", result_string(res));
 				sp_task->invalid_picture(i);
-// 				cv::imshow("s", sp_pic->data());
-// 				cv::waitKey();
+ 				cv::imshow("train preprocess fail", sp_pic->data());
+ 				cv::waitKey();
 			}
 			else
 			{
 				util_log::logd(SESSION_TAG, "train preprcoessor manager process picture success.");
 				sp_task->update_picture(i, sp_processed_pic);
-// 				cv::imshow("s", sp_processed_pic->data());
-// 				cv::waitKey();
+//  				cv::imshow("train preprocess success", sp_processed_pic->data());
+//  				cv::waitKey();
 			}
 		}
 		m_sp_model_recognizer->train(sp_task);
@@ -91,9 +91,13 @@ namespace face_recognition
 		result res = m_sp_preprocessor_mgr->process(sp_pic, sp_prcoessed_pic);
 		if (res != result_success)
 		{
+			cv::imshow("predict preprocess fail", sp_pic->data());
+			cv::waitKey();
 			util_log::log(SESSION_TAG, "preprocess picture fail with result[%s] before predict.", result_string(res));
 			return res;
 		}
+ 		cv::imshow("predict preprocess success", sp_prcoessed_pic->data());
+ 		cv::waitKey();
 		m_sp_model_recognizer->predict(sp_prcoessed_pic, str_label, confidence);
 		return result_success;
 	}

@@ -42,24 +42,6 @@ namespace face_recognition
 			{
 				util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "+-WARNING-+ context gray state get fail. the picture may not be gray before face_area_detect");
 			}
-
-			bool equalization_handled_state = false;
-			res = sp_ctx->get_bool_value(EUQALIZATION_HANDLE_STATE, equalization_handled_state);
-			if (res == result_success)
-			{
-				if (!equalization_handled_state)
-				{
-					util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "+-WARNING-+ context equalization state have not been set. face_area_detect should be done after it.");
-				}
-				else
-				{
-					util_log::logd(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "context equalization state have been set.");
-				}
-			}
-			else
-			{
-				util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "+-WARNING-+ context equalization state get fail. the picture may not be equalization before face_area_detect");
-			}
 			
 			boost::shared_ptr<cascade_detector> sp_face_detector;
 			res = cascade_detector::create(m_str_cascade_file, sp_face_detector);
@@ -100,13 +82,6 @@ namespace face_recognition
 			boost::shared_ptr<pic_rect> sp_rect(boost::make_shared<pic_rect>(max_acreage_rect._x, max_acreage_rect._y, max_acreage_rect._width, max_acreage_rect._height));
 			sp_ctx->set_value(FACE_AREA_RECT, sp_rect);
 
-// 			res = picture_handler::cut(sp_pic_in, max_acreage_rect._x, max_acreage_rect._y, max_acreage_rect._width, max_acreage_rect._height, sp_pic_out);
-// 			if (res != result_success)
-// 			{
-// 				util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "cut picture by max face area fail with result[%s].", result_string(res));
-// 				return res;
-// 			}
-			
 			sp_ctx->set_bool_value(FACE_AREA_DETECT_STATE, true);
 			util_log::logd(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "detect_face_area success and set context [%ws] to true.", FACE_AREA_DETECT_STATE);
 			

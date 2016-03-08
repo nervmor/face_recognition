@@ -21,21 +21,19 @@ namespace face_recognition
 		boost::shared_ptr<preprocessor> sp_gray_preprocessor = preprocessor_factroy::create_preprocessor<gray_preprocessor>();
 		boost::shared_ptr<preprocessor> sp_equalization_preprocessor = preprocessor_factroy::create_preprocessor<equalization_preprocessor>();
 		boost::shared_ptr<preprocessor> sp_face_area_detect_preprocessor = preprocessor_factroy::create_preprocessor<face_area_detect_preprocessor>(str_face_cascade_file, min_face_area_width, min_face_area_height, max_face_area_width, max_face_area_height);
-		boost::shared_ptr<preprocessor> sp_size_align_preprocessor = preprocessor_factroy::create_preprocessor<size_align_preprocessor>(size_align_length);
-		boost::shared_ptr<preprocessor> sp_face_align_preprocessor = preprocessor_factroy::create_preprocessor<face_align_preprocessor>(str_flandmark_model_file);
+		boost::shared_ptr<preprocessor> sp_face_align_preprocessor = preprocessor_factroy::create_preprocessor<face_align_preprocessor>(str_flandmark_model_file, size_align_length);
 		boost::shared_ptr<preprocessor> sp_face_contour_mask_preprocessor = preprocessor_factroy::create_preprocessor<face_contour_mask_preprocessor>(low_threshold, high_threshold);
 
 		boost::shared_ptr<preprocessor_manager> sp_mgr(preprocessor_manager::create());
 
 		sp_mgr->add_preprocessor(sp_gray_preprocessor);
-		sp_mgr->add_preprocessor(sp_equalization_preprocessor);
 		sp_mgr->add_preprocessor(sp_face_area_detect_preprocessor);
-		//sp_mgr->add_preprocessor(sp_size_align_preprocessor);
 		sp_mgr->add_preprocessor(sp_face_align_preprocessor);
+		sp_mgr->add_preprocessor(sp_equalization_preprocessor);
 		//sp_mgr->add_preprocessor(sp_face_contour_mask_preprocessor);
 
 		boost::shared_ptr<session> sp_session;
-		result res = session::create(sp_mgr, model_recognizer::type_eigen, sp_session);
+		result res = session::create(sp_mgr, model_recognizer::type_lbph, sp_session);
 		if (res != result_success)
 		{
 			util_log::log(SCHEME_TAG, "create session fail with result[%s]", result_string(res));

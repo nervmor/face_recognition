@@ -41,12 +41,66 @@ namespace face_recognition
 			{
 				util_log::log(EQUALIZATION_PREPROCESSOR_TAG, "+-WARNING-+ context gray state get fail. the picture may not be gray before equalization");
 			}
-			res = picture_handler::equalization(sp_pic_in, sp_pic_out);
-			if (res != result_success)
+
+			//直方图均衡化,左均衡右均衡,全均衡
+			cv::Mat faceImg(sp_pic_in->data());
+			
+			int w = faceImg.cols;
+			int h = faceImg.rows;
+			cv::Mat wholeFace;
+			cv::equalizeHist(faceImg, wholeFace);
+			int midX = w / 2;
+			cv::Mat leftSide = faceImg(cv::Rect(0, 0, midX, h));
+			cv::Mat rightSide = faceImg(cv::Rect(midX, 0, w - midX, h));
+			cv::equalizeHist(leftSide, leftSide);
+			cv::equalizeHist(rightSide, rightSide);
+
+
+			for (int y = 0; y < h; y++)
 			{
-				util_log::log(EQUALIZATION_PREPROCESSOR_TAG, "equalization fail with result[%s].", result_string(res));
-				return res;
+				for (int x = 0; x < w; x++)
+				{
+					int v;
+					if (x < w / 4)
+					{
+						v = leftSide.at<uchar>(y, x);
+					}
+					else if (x < w * 2 / 4)
+					{
+						int lv = leftSide.at<uchar>(y, x);
+						int wv = wholeFace.at<uchar>(y, x);
+						float f = (x - w * 1 / 4) / (float)(w / 4);
+						v = cvRound((1.0f - f)*lv + (f)*wv);
+					}
+					else if (x < w * 3 / 4)
+					{
+						int rv = rightSide.at<uchar>(y, x - midX);
+						int wv = wholeFace.at<uchar>(y, x);
+						float f = (x - w * 2 / 4) / (float)(w / 4);
+						v = cvRound((1.0f - f)*wv + (f)*rv);
+
+					}
+					else
+					{
+						v = rightSide.at<uchar>(y, x - midX);
+					}
+					faceImg.at<uchar>(y, x) = v;
+				}
 			}
+			cv::Mat filtered = cv::Mat(faceImg.size(), CV_8U);
+			cv::bilateralFilter(faceImg, filtered, 0, 20.0, 2.0);
+
+			//椭圆形掩码
+			cv::Mat mask = cv::Mat(faceImg.size(), CV_8UC1, cv::Scalar(255));
+
+
+			cv::Point faceCenter = cv::Point(cvRound(faceImg.size().width*0.5), cvRound(faceImg.size().height*0.4));
+			cv::Size size = cv::Size(cvRound(faceImg.size().width*0.5), cvRound(faceImg.size().height*0.8));
+			ellipse(mask, faceCenter, size, 0, 0, 360, cv::Scalar(0), CV_FILLED);
+			filtered.setTo(cv::Scalar(128), mask);
+
+			sp_pic_out = picture::create(filtered);
+
 			sp_ctx->set_bool_value(EUQALIZATION_HANDLE_STATE, true);
 			util_log::logd(EQUALIZATION_PREPROCESSOR_TAG, "equalization success and set context [%ws] to true.", EUQALIZATION_HANDLE_STATE);
 			return result_success;

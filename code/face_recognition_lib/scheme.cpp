@@ -14,14 +14,15 @@
 namespace face_recognition
 {
 	result scheme::train(const std::wstring& str_train_pic_dir,
-		const std::wstring& str_face_cascade_file, const std::wstring& str_flandmark_model_file, unsigned int min_face_area_width, unsigned int min_face_area_height, unsigned int max_face_area_width, unsigned int max_face_area_height,
+		const std::wstring& str_face_cascade_file, const std::wstring& str_eye_cascade_file,
+		const std::wstring& str_eye_cascade_file2, const std::wstring& str_flandmark_model_file, unsigned int min_face_area_width, unsigned int min_face_area_height, unsigned int max_face_area_width, unsigned int max_face_area_height,
 		unsigned int size_align_length,
 		int low_threshold, int high_threshold)
 	{
 		boost::shared_ptr<preprocessor> sp_gray_preprocessor = preprocessor_factroy::create_preprocessor<gray_preprocessor>();
 		boost::shared_ptr<preprocessor> sp_equalization_preprocessor = preprocessor_factroy::create_preprocessor<equalization_preprocessor>();
 		boost::shared_ptr<preprocessor> sp_face_area_detect_preprocessor = preprocessor_factroy::create_preprocessor<face_area_detect_preprocessor>(str_face_cascade_file, min_face_area_width, min_face_area_height, max_face_area_width, max_face_area_height);
-		boost::shared_ptr<preprocessor> sp_face_align_preprocessor = preprocessor_factroy::create_preprocessor<face_align_preprocessor>(str_flandmark_model_file, size_align_length);
+		boost::shared_ptr<preprocessor> sp_face_align_preprocessor = preprocessor_factroy::create_preprocessor<face_align_preprocessor>(str_eye_cascade_file, str_eye_cascade_file2, str_flandmark_model_file, size_align_length);
 		boost::shared_ptr<preprocessor> sp_face_contour_mask_preprocessor = preprocessor_factroy::create_preprocessor<face_contour_mask_preprocessor>(low_threshold, high_threshold);
 
 		boost::shared_ptr<preprocessor_manager> sp_mgr(preprocessor_manager::create());

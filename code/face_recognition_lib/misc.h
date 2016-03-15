@@ -281,11 +281,11 @@ namespace face_recognition
 				
 			}
 		}
-		result detect_face(boost::shared_ptr<picture> sp_pic_in, std::vector<pic_rect>& vec_rect, unsigned int min_width, unsigned int min_height, unsigned int max_width, unsigned int max_height)
+		result detect(boost::shared_ptr<picture> sp_pic_in, std::vector<pic_rect>& vec_rect, unsigned int min_width, unsigned int min_height, unsigned int max_width, unsigned int max_height)
 		{
 			if (sp_pic_in->depth() != CV_8U)
 			{
-				util_log::log(CASCADE_DETECTOR_TAG, "picture is not CV_8U to detect faces.");
+				util_log::log(CASCADE_DETECTOR_TAG, "picture is not CV_8U to detect cascade rect.");
 				return result_picture_invalid;
 			}
 			std::vector<cv::Rect> faces;
@@ -296,11 +296,11 @@ namespace face_recognition
 				| cv::CASCADE_SCALE_IMAGE);
 			if (faces.empty())
 			{
-				util_log::logd(CASCADE_DETECTOR_TAG, "there is no faces detected.");
+				util_log::logd(CASCADE_DETECTOR_TAG, "there is no cascade rect detected.");
 			}
 			else
 			{
-				std::string str_face_rect_info = "detected faces -->";
+				std::string str_face_rect_info = "detected cascade rect -->";
 				for (std::vector<cv::Rect>::iterator it = faces.begin(); it != faces.end(); it++)
 				{
 					cv::Rect& rect = *it;

@@ -7,9 +7,10 @@ void main()
 	face_recognition::scheme sc;
 	sc.train(L"S:\\local\\face_recognition\\code\\data\\train_picture\\", 
 		L"S:\\local\\face_recognition\\code\\data\\haarcascades\\haarcascade_frontalface_alt.xml",
+		L"S:\\local\\face_recognition\\code\\data\\haarcascades\\haarcascade_eye.xml",
+		L"S:\\local\\face_recognition\\code\\data\\haarcascades\\haarcascade_eye_tree_eyeglasses.xml",
 		L"S:\\local\\face_recognition\\code\\data\\flandmark_data\\flandmark_model.dat",
 		1, 1, 2000, 2000, 100, 98, 255);
-
 
 	std::vector<std::wstring> vec_predict_file;
 	util_path::list_dir_files(L"S:\\local\\face_recognition\\code\\data\\predict_picture\\", vec_predict_file);

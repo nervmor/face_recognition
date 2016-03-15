@@ -51,7 +51,7 @@ namespace face_recognition
 				return res;
 			}
 			std::vector<pic_rect> vec_face_rect;
-			res = sp_face_detector->detect_face(sp_pic_in, vec_face_rect, m_min_width, m_min_height, m_max_width, m_max_height);
+			res = sp_face_detector->detect(sp_pic_in, vec_face_rect, m_min_width, m_min_height, m_max_width, m_max_height);
 			if (res != result_success)
 			{
 				util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "detect_face fail with result[%s].", result_string(res));

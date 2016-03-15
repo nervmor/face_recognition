@@ -13,7 +13,6 @@ namespace face_recognition
 			const std::wstring& str_eye_cascade_file,
 			const std::wstring& str_eye_cascade_file2,
 			const std::wstring& str_flandmark_model_file,
-			unsigned int min_face_area_width, unsigned int min_face_area_height, unsigned int max_face_area_width, unsigned int max_face_area_height,
 			unsigned int size_align_length,
 			int low_threshold, int high_threshold);
 		result predict(const std::wstring& str_pic, std::wstring& str_label, double& confidence);

@@ -51,7 +51,7 @@ namespace face_recognition
 				return res;
 			}
 			std::vector<pic_rect> vec_face_rect;
-			res = sp_face_detector->detect(sp_pic_in, vec_face_rect, m_min_width, m_min_height, m_max_width, m_max_height);
+			res = sp_face_detector->detect(sp_pic_in, vec_face_rect);
 			if (res != result_success)
 			{
 				util_log::log(FACE_ARRA_DETECT_PREPROCESSOR_TAG, "detect_face fail with result[%s].", result_string(res));
@@ -88,22 +88,10 @@ namespace face_recognition
 			return result_success;
 		}
 	public:
-		face_area_detect_preprocessor(const std::wstring& str_cascade_file, 
-									  unsigned int min_width, 
-									  unsigned int min_height,
-									  unsigned int max_width,
-									  unsigned int max_height)
+		face_area_detect_preprocessor(const std::wstring& str_cascade_file)
 					: m_str_cascade_file(str_cascade_file)
-					, m_min_width(min_width)
-					, m_min_height(min_height)
-					, m_max_width(max_width)
-					, m_max_height(max_height)
 		{}
 	private:
 		std::wstring m_str_cascade_file;
-		unsigned int m_min_width;
-		unsigned int m_min_height;
-		unsigned int m_max_width;
-		unsigned int m_max_height;
 	};
 }

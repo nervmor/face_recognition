@@ -281,7 +281,7 @@ namespace face_recognition
 				
 			}
 		}
-		result detect(boost::shared_ptr<picture> sp_pic_in, std::vector<pic_rect>& vec_rect, unsigned int min_width, unsigned int min_height, unsigned int max_width, unsigned int max_height)
+		result detect(boost::shared_ptr<picture> sp_pic_in, std::vector<pic_rect>& vec_rect)
 		{
 			if (sp_pic_in->depth() != CV_8U)
 			{
@@ -305,12 +305,39 @@ namespace face_recognition
 				{
 					cv::Rect& rect = *it;
 					vec_rect.push_back(pic_rect(rect.x, rect.y, rect.width, rect.height));
-					char buf[4096 * 4];
+					char buf[4096];
 					sprintf(buf, "[%d, %d, %d, %d]", rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
 					str_face_rect_info += buf;
 				}
 				util_log::logd(CASCADE_DETECTOR_TAG, str_face_rect_info.c_str());
 			}
+			return result_success;
+		}
+		result detect_largest(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<pic_rect>& sp_rect)
+		{
+			std::vector<pic_rect> vec_rect;
+			result res = detect(sp_pic_in, vec_rect);
+			if (res != result_success)
+			{
+				return res;
+			}
+			if (vec_rect.empty())
+			{
+				return result_success;
+			}
+			pic_rect& max_acreage_rect = *vec_rect.begin();
+			int_64 max_acreage = max_acreage_rect.cacl_acreage();
+			for (std::vector<pic_rect>::iterator it = vec_rect.begin(); it != vec_rect.end(); it++)
+			{
+				pic_rect& rect = *it;
+				int_64 acreage = rect.cacl_acreage();
+				if (acreage > max_acreage)
+				{
+					max_acreage = acreage;
+					max_acreage_rect = *it;
+				}
+			}
+			sp_rect = boost::make_shared<pic_rect>(max_acreage_rect);
 			return result_success;
 		}
 	private:
@@ -486,6 +513,16 @@ namespace face_recognition
 			std::vector<int> labels;
 			std::map<int, std::wstring> map_label_str;
 			sp_task->get(images, labels, map_label_str);
+			if (images.empty())
+			{
+				util_log::log(MODEL_RECOGNIZER_TAG, "get no valid image to train.");
+				return;
+			}
+			if (images.size() != labels.size())
+			{
+				util_log::log(MODEL_RECOGNIZER_TAG, "images and labels count is not the same. no pictures are train fail.");
+				return;
+			}
 			if (m_type == type_lbph)
 			{
 				m_model_lbph->train(images, labels);

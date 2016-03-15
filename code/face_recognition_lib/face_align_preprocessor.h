@@ -8,7 +8,7 @@ namespace face_recognition
 	class face_align_preprocessor : public preprocessor
 	{
 	public:
-		result get_eyes_postion(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<pic_rect> sp_rect, boost::shared_ptr<pic_point>& sp_left_eye, boost::shared_ptr<pic_point>& sp_right_eye)
+		result get_eyes_postion(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<pic_rect> sp_face_rect, boost::shared_ptr<pic_point>& sp_left_eye, boost::shared_ptr<pic_point>& sp_right_eye)
 		{
 			boost::shared_ptr<face_feature_detector> sp_detector;
 			result res = face_feature_detector::create(m_str_flandmark_model_file, sp_detector);
@@ -18,17 +18,21 @@ namespace face_recognition
 				return res;
 			}
 			boost::shared_ptr<face_feature> sp_feature;
-			res = sp_detector->detect_feature(sp_pic_in, *sp_rect.get(), sp_feature);
+			res = sp_detector->detect_feature(sp_pic_in, *sp_face_rect.get(), sp_feature);
 			if (res != result_success)
 			{
 				util_log::log(FACE_ALIGN_PREPROCESSOR_TAG, "detect_feature fail with result[%s]", result_string(res));
 				return res;
 			}
+
+			pic_point feature_pic_left_eye((sp_feature->_left_eye_left._x + sp_feature->_left_eye_right._x) / 2, (sp_feature->_left_eye_left._y + sp_feature->_left_eye_right._y) / 2);
+			pic_point feature_pic_right_eye((sp_feature->_right_eye_left._x + sp_feature->_right_eye_right._x) / 2, (sp_feature->_right_eye_left._y + sp_feature->_right_eye_right._y) / 2);
+
 			cv::Rect face_rect;
-			face_rect.x = sp_rect->_x;
-			face_rect.y = sp_rect->_y;
-			face_rect.width = sp_rect->_width;
-			face_rect.height = sp_rect->_height;
+			face_rect.x = sp_face_rect->_x;
+			face_rect.y = sp_face_rect->_y;
+			face_rect.width = sp_face_rect->_width;
+			face_rect.height = sp_face_rect->_height;
 
 			cv::Mat face = cv::Mat(sp_pic_in->data(), face_rect);
 			const float EYE_SX = 0.16f;//x
@@ -44,7 +48,6 @@ namespace face_recognition
 
 			cv::Mat topLeftOfFace = face(cv::Rect(leftX, topY, widthX, heightY));
 			cv::Mat topRightOfFace = face(cv::Rect(rightX, topY, widthX, heightY));
-			cv::Rect leftEyeRect, rightEyeRect;
 
 			boost::shared_ptr<picture> sp_face_left_eye = picture::create(topLeftOfFace);
 			boost::shared_ptr<picture> sp_face_right_eye = picture::create(topRightOfFace);
@@ -54,55 +57,45 @@ namespace face_recognition
 			{
 				return res;
 			}
-			std::vector<pic_rect> vec_left_eye_rect;
-			res = sp_cascade_detector->detect(sp_face_left_eye, vec_left_eye_rect, 0, 0, 1000, 1000);
+			boost::shared_ptr<pic_rect> sp_left_eye_rect;
+			res = sp_cascade_detector->detect_largest(sp_face_left_eye, sp_left_eye_rect);
 			if (res != result_success)
 			{
 				return res;
 			}
-			if (vec_left_eye_rect.empty())
+			if (!sp_left_eye_rect)
 			{
-				return result_already_handled;
+				return result_no_face_feature_fetected;
 			}
 
-			std::vector<pic_rect> vec_right_eye_rect;
-			res = sp_cascade_detector->detect(sp_face_right_eye, vec_right_eye_rect, 0, 0, 1000, 1000);
+			boost::shared_ptr<pic_rect> sp_right_eye_rect;
+			res = sp_cascade_detector->detect_largest(sp_face_right_eye, sp_right_eye_rect);
 			if (res != result_success)
 			{
 				return res;
 			}
-			if (vec_right_eye_rect.empty())
+			if (!sp_right_eye_rect)
 			{
-				return result_already_handled;
+				return result_no_face_feature_fetected;
 			}
 
-			leftEyeRect.x = leftX + vec_left_eye_rect[0]._x + sp_rect->_x;
-			leftEyeRect.y = topY + vec_left_eye_rect[0]._y + sp_rect->_y;
-			leftEyeRect.width = vec_left_eye_rect[0]._width;
-			leftEyeRect.height = vec_left_eye_rect[0]._height;
-			pic_point cascade_pic_left_eye(leftEyeRect.x + leftEyeRect.width / 2, leftEyeRect.y + leftEyeRect.height / 2);
+			pic_point cascade_pic_left_eye(leftX + sp_left_eye_rect->_x + sp_face_rect->_x + sp_left_eye_rect->_width / 2, topY + sp_left_eye_rect->_y + sp_face_rect->_y + sp_left_eye_rect->_height / 2);
+			pic_point cascade_pic_right_eye(rightX + sp_right_eye_rect->_x + sp_face_rect->_x + sp_right_eye_rect->_width / 2, topY + sp_right_eye_rect->_y + sp_face_rect->_y + sp_right_eye_rect->_height / 2);
 
-			rightEyeRect.x = rightX + vec_right_eye_rect[0]._x + sp_rect->_x;
-			rightEyeRect.y = topY + vec_right_eye_rect[0]._y + sp_rect->_y;
-			rightEyeRect.width = vec_right_eye_rect[0]._width;
-			rightEyeRect.height = vec_right_eye_rect[0]._height;
-			pic_point cascade_pic_right_eye(rightEyeRect.x + rightEyeRect.width / 2, rightEyeRect.y + rightEyeRect.height / 2);
+			unsigned int left_eye_x_delta = cascade_pic_left_eye._x > feature_pic_left_eye._x ? cascade_pic_left_eye._x - feature_pic_left_eye._x : feature_pic_left_eye._x - cascade_pic_left_eye._x;
+			unsigned int left_eye_y_delta = cascade_pic_left_eye._y > feature_pic_left_eye._y ? cascade_pic_left_eye._y - feature_pic_left_eye._y : feature_pic_left_eye._y - cascade_pic_left_eye._y;
+			unsigned int right_eye_x_delta = cascade_pic_right_eye._x > feature_pic_right_eye._x ? cascade_pic_right_eye._x - feature_pic_right_eye._x : feature_pic_right_eye._x - cascade_pic_right_eye._x;
+			unsigned int right_eye_y_delta = cascade_pic_right_eye._y > feature_pic_right_eye._y ? cascade_pic_right_eye._y - feature_pic_right_eye._y : feature_pic_right_eye._y - cascade_pic_right_eye._y;
 
-			cv::circle(sp_pic_in->data(), cv::Point(cascade_pic_left_eye._x, cascade_pic_left_eye._y), 3, CV_RGB(0, 255, 0), CV_FILLED);
-			cv::circle(sp_pic_in->data(), cv::Point(cascade_pic_right_eye._x, cascade_pic_right_eye._y), 3, CV_RGB(0, 255, 0), CV_FILLED);
-			cv::imshow("cascade", face);
-			cv::waitKey();
+			unsigned int x_range_delta = cvRound(sp_face_rect->_width * EYE_SW  / 2);
+			unsigned int y_range_delta = cvRound(sp_face_rect->_height * EYE_SH / 2);
 
-			pic_point feature_pic_left_eye((sp_feature->_left_eye_left._x + sp_feature->_left_eye_right._x) / 2, (sp_feature->_left_eye_left._y + sp_feature->_left_eye_right._y) / 2);
-			pic_point feature_pic_right_eye((sp_feature->_right_eye_left._x + sp_feature->_right_eye_right._x) / 2, (sp_feature->_right_eye_left._y + sp_feature->_right_eye_right._y) / 2);
-			cv::circle(sp_pic_in->data(), cv::Point(feature_pic_left_eye._x, feature_pic_left_eye._y), 3, CV_RGB(255, 255, 0), CV_FILLED);
-			cv::circle(sp_pic_in->data(), cv::Point(feature_pic_right_eye._x, feature_pic_right_eye._y), 3, CV_RGB(255, 255, 0), CV_FILLED);
-			cv::imshow("flandmark", face);
-			cv::waitKey();
-
-			util_log::log(FACE_ALIGN_PREPROCESSOR_TAG, "flandmark eyes [%d,%d] [%d,%d] --- cascade eyes [%d,%d][%d,%d]", 
+			util_log::logd(FACE_ALIGN_PREPROCESSOR_TAG, "flandmark eyes [%d,%d] [%d,%d] --- cascade eyes [%d,%d][%d,%d] --->delta [%d,%d][%d,%d]",
 				feature_pic_left_eye._x, feature_pic_left_eye._y, feature_pic_right_eye._x, feature_pic_right_eye._y,
-				cascade_pic_left_eye._x, cascade_pic_left_eye._y, cascade_pic_right_eye._x, cascade_pic_right_eye._y);
+				cascade_pic_left_eye._x, cascade_pic_left_eye._y, cascade_pic_right_eye._x, cascade_pic_right_eye._y,
+				left_eye_x_delta, left_eye_y_delta, right_eye_x_delta, right_eye_y_delta,
+				x_range_delta, y_range_delta);
+
 			return result_dir_not_exist;
 		}
 		virtual std::wstring name()

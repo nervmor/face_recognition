@@ -11,6 +11,10 @@ namespace face_recognition
 		{
 			return L"edge_preprocessor";
 		}
+		virtual result init()
+		{
+			return result_success;
+		}
 		virtual result process(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<context> sp_ctx, boost::shared_ptr<picture>& sp_pic_out)
 		{
 			bool edge_handled_state = false;

@@ -9,8 +9,8 @@ namespace face_recognition
 	public:
 		static boost::shared_ptr<preprocessor_manager> create();
 		void destroy();
-		void add_preprocessor(boost::shared_ptr<preprocessor> sp_preprocessor);
-		result process(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<picture>& sp_pic_out);
+		result add_preprocessor(boost::shared_ptr<preprocessor> sp_preprocessor);
+		result process(boost::shared_ptr<picture> sp_pic_in, const std::wstring& str_pic_filename, boost::shared_ptr<picture>& sp_pic_out);
 		unsigned int get_preprocess_count();
 	private:
 		std::vector<boost::shared_ptr<preprocessor> > m_vec_preprocessor;

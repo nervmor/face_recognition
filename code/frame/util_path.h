@@ -12,12 +12,20 @@ class util_path
 public:
 	static std::wstring get_image_dir()
 	{
+#ifdef _WIN32
+#include <windows.h>
+		WCHAR szImagePath[4096];
+		GetModuleFileNameW(NULL, szImagePath, 4096);
+		std::wstring str_image_dir = szImagePath;
+		return get_dir(str_image_dir);
+#else
 		std::wstring str_image_dir = boost::filesystem::initial_path<boost::filesystem::wpath>().wstring();
 		if (str_image_dir[str_image_dir.size() - 1] != L'/')
 		{
 			str_image_dir += L"/";
 		}
 		return str_image_dir;
+#endif // _WIN32
 	}
 	static std::wstring get_dir(const std::wstring& str_file_name)
 	{

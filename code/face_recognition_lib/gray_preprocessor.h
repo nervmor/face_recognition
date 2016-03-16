@@ -12,6 +12,10 @@ namespace face_recognition
 		{
 			return L"gray_preprocessor";
 		}
+		virtual result init()
+		{
+			return result_success;
+		}
 		virtual result process(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<context> sp_ctx, boost::shared_ptr<picture>& sp_pic_out)
 		{
 			bool gray_handle_state = false;

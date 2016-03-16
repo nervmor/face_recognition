@@ -12,6 +12,9 @@
 #define SESSION_TAG							"session"
 #define TRAIN_TASK_CREATOR_TAG				"train_task_creator"
 #define SCHEME_TAG							"scheme"
+
+
+#define PICTURE_FILENAME_CONTEXT_KEY		L"filename"
 namespace face_recognition{
 
 	enum result
@@ -26,7 +29,7 @@ namespace face_recognition{
 		result_already_handled,
 		result_no_face_detected,
 		result_lib_fail,
-		result_no_face_feature_fetected
+		result_no_eyes_fetected
 	};
 
 	const char* result_string(result res);

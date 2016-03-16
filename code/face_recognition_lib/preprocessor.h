@@ -12,6 +12,7 @@ namespace face_recognition
 	public:
 		virtual ~preprocessor(){}
 		virtual std::wstring name() = 0;
+		virtual result init() = 0;
 		virtual result process(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<context> sp_ctx, boost::shared_ptr<picture>& sp_pic_out) = 0;
 	public:
 		friend class preprocessor_factroy;

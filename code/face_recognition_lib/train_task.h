@@ -54,23 +54,23 @@ namespace face_recognition
 				util_log::log(TRAIN_TASK_TAG, "load picture[%ws] fail with result[%s] in add.", str_pic_file.c_str(), result_string(res));
 				return res;
 			}
+			m_vec_picture.push_back(sp_picture);
+			m_vec_filename.push_back(str_pic_file);
 			std::map<std::wstring, std::vector<unsigned int> >::iterator it = m_map_label_vecpicindex.find(str_label);
 			if (it == m_map_label_vecpicindex.end())
 			{
 				std::vector<unsigned int> vec_pic_index;
-				m_vec_picture.push_back(sp_picture);
 				vec_pic_index.push_back(m_vec_picture.size() - 1);
 				m_map_label_vecpicindex.insert(std::make_pair(str_label, vec_pic_index));
 			}
 			else
 			{
 				std::vector<unsigned int>& vec_pic_index = it->second;
-				m_vec_picture.push_back(sp_picture);
 				vec_pic_index.push_back(m_vec_picture.size() - 1);
 			}
 			return result_success;
 		}
-		void get(std::vector<cv::Mat>& images, std::vector<int>& labels, std::map<int, std::wstring>& map_label_str)
+		void get(std::vector<cv::Mat>& images, std::vector<int>& labels, std::vector<std::wstring>& filenames, std::map<int, std::wstring>& map_label_str)
 		{
 			int label_index = 0;
 			for (std::map<std::wstring, std::vector<unsigned int> >::iterator it = m_map_label_vecpicindex.begin(); it != m_map_label_vecpicindex.end(); it++)
@@ -105,6 +105,7 @@ namespace face_recognition
 					boost::shared_ptr<picture> sp_pic = m_vec_picture[index];
 					images.push_back(sp_pic->data());
 					labels.push_back(label_index);
+					filenames.push_back(m_vec_filename[index]);
 				}
 			}
 		}
@@ -116,6 +117,11 @@ namespace face_recognition
 		{
 			Assert(index < m_vec_picture.size());
 			return m_vec_picture[index];
+		}
+		const std::wstring& get_picture_filename(unsigned int index)
+		{
+			Assert(index < m_vec_picture.size());
+			return m_vec_filename[index];
 		}
 		void update_picture(unsigned int index, boost::shared_ptr<picture> sp_pic)
 		{
@@ -135,6 +141,7 @@ namespace face_recognition
 	private:
 		std::map<std::wstring, std::vector<unsigned int> > m_map_label_vecpicindex;
 		std::vector<boost::shared_ptr<picture>> m_vec_picture;
+		std::vector<std::wstring> m_vec_filename;
 		std::set<unsigned int> m_vec_invalid_index;
 	public:
 		~train_task()

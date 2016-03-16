@@ -16,7 +16,9 @@ typedef struct _escape_item
 escape_item g_escape_items[] =
 {
 	{"OpenCV - Microsoft Visual Studio", NULL, NULL},
+	{"OpenCV(正在运行) - Microsoft Visual Studio", NULL, NULL },
 	{"face_recognition - Microsoft Visual Studio", NULL, NULL},
+	{"face_recognition(正在运行) - Microsoft Visual Studio", NULL, NULL },
 	{"demo - Microsoft Visual Studio", "wndclass_desked_gsk", NULL},
 	{"demo (正在运行) - Microsoft Visual Studio", "wndclass_desked_gsk", NULL},
 	{"demo (正在调试) - Microsoft Visual Studio", "wndclass_desked_gsk", NULL},

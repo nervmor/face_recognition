@@ -16,7 +16,7 @@ namespace face_recognition
 			"result_already_handled",
 			"result_no_face_detected",
 			"result_lib_fail",
-			"result_no_face_feature_fetected"
+			"result_no_eyes_fetected"
 		};
 		return s_result_string[(unsigned int)res];
 	}

@@ -108,6 +108,9 @@
     <ClInclude Include="..\..\face_recognition_lib\face_align_preprocessor.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\face_recognition_lib\eyes_point_detect_preprocessor.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\face_recognition_lib\picture.cpp">
@@ -123,6 +126,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\face_recognition_lib\scheme.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\face_recognition_lib\misc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\face_recognition_lib\picture_handle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

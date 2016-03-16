@@ -14,7 +14,7 @@ namespace face_recognition
 		void destroy();
 	public:
 		result train(boost::shared_ptr<train_task> sp_task);
-		result predict(boost::shared_ptr<picture> sp_pic, std::wstring& str_label, double& confidence);
+		result predict(boost::shared_ptr<picture> sp_pic, const std::wstring& str_pic_filename, std::wstring& str_label, double& confidence);
 		result save(const std::wstring& file);
 	private:
 		enum state

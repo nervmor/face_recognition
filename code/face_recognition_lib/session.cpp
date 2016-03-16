@@ -8,7 +8,12 @@ namespace face_recognition
 	{
 		sp_session = boost::make_shared<session>();
 		sp_session->m_sp_preprocessor_mgr = sp_preprocessor_mgr;
-		model_recognizer::create(model_type, sp_session->m_sp_model_recognizer);
+		result res = model_recognizer::create(model_type, sp_session->m_sp_model_recognizer);
+		if (res != result_success)
+		{
+			util_log::log(SESSION_TAG, "create model_recognizer fail with result[%s]", result_string(res));
+			return res;
+		}
 		util_log::logd(SESSION_TAG, "create session success with preprocessor count[%d]", sp_preprocessor_mgr->get_preprocess_count());
 		return result_success;
 	}
@@ -56,18 +61,20 @@ namespace face_recognition
 			}
 			boost::shared_ptr<picture> sp_pic = sp_task->get_picture(i);
 			Assert(sp_pic);
+			const std::wstring& str_pic_filename = sp_task->get_picture_filename(i);
 			boost::shared_ptr<picture> sp_processed_pic;
-			result res = m_sp_preprocessor_mgr->process(sp_pic, sp_processed_pic);
+			util_log::log(SESSION_TAG, "start preprocess picture[%ws] for training.", str_pic_filename.c_str());
+			result res = m_sp_preprocessor_mgr->process(sp_pic, str_pic_filename, sp_processed_pic);
 			if (res != result_success)
 			{
-				util_log::log(SESSION_TAG, "train picture fail. preprocess manager process it fail with result[%s]", result_string(res));
+				util_log::log(SESSION_TAG, "train picture[%ws] fail. preprocess manager process it fail with result[%s]", str_pic_filename.c_str(), result_string(res));
 				sp_task->invalid_picture(i);
 //  			cv::imshow("train preprocess fail", sp_pic->data());
 //  			cv::waitKey();
 			}
 			else
 			{
-				util_log::logd(SESSION_TAG, "train preprcoessor manager process picture success.");
+				util_log::logd(SESSION_TAG, "train preprcoessor manager process picture[%ws] success.", str_pic_filename.c_str());
 				sp_task->update_picture(i, sp_processed_pic);
 //  			cv::imshow("train preprocess success", sp_processed_pic->data());
 //  			cv::waitKey();
@@ -79,7 +86,7 @@ namespace face_recognition
 		return result_success;
 	}
 
-	result session::predict(boost::shared_ptr<picture> sp_pic, std::wstring& str_label, double& confidence)
+	result session::predict(boost::shared_ptr<picture> sp_pic, const std::wstring& str_pic_filename, std::wstring& str_label, double& confidence)
 	{
 		Assert(m_state == state_wait_for_predict);
 		if (m_state != state_wait_for_predict)
@@ -88,14 +95,16 @@ namespace face_recognition
 			return result_train_repeated;
 		}
 		boost::shared_ptr<picture> sp_prcoessed_pic;
-		result res = m_sp_preprocessor_mgr->process(sp_pic, sp_prcoessed_pic);
+		util_log::log(SESSION_TAG, "start preprocess picture[%ws] for predicting.", str_pic_filename.c_str());
+		result res = m_sp_preprocessor_mgr->process(sp_pic, str_pic_filename, sp_prcoessed_pic);
 		if (res != result_success)
 		{
 			cv::imshow("predict preprocess fail", sp_pic->data());
 			cv::waitKey();
-			util_log::log(SESSION_TAG, "preprocess picture fail with result[%s] before predict.", result_string(res));
+			util_log::log(SESSION_TAG, "preprocess picture[%ws] fail with result[%s] before predict.", str_pic_filename.c_str(), result_string(res));
 			return res;
 		}
+		util_log::log(SESSION_TAG, "preprocess picture[%ws] for predicting success.", str_pic_filename.c_str());
  		cv::imshow("predict preprocess success", sp_prcoessed_pic->data());
  		cv::waitKey();
 		m_sp_model_recognizer->predict(sp_prcoessed_pic, str_label, confidence);

@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\face_recognition_lib\blur_preprocessor.h" />
     <ClInclude Include="..\..\face_recognition_lib\context.h" />
+    <ClInclude Include="..\..\face_recognition_lib\eyes_point_detect_preprocessor.h" />
     <ClInclude Include="..\..\face_recognition_lib\scheme.h" />
     <ClInclude Include="..\..\face_recognition_lib\define.h" />
     <ClInclude Include="..\..\face_recognition_lib\edge_preprocessor.h" />
@@ -133,6 +134,8 @@
     <ClInclude Include="..\..\frame\util_time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\face_recognition_lib\misc.cpp" />
+    <ClCompile Include="..\..\face_recognition_lib\picture_handle.cpp" />
     <ClCompile Include="..\..\face_recognition_lib\scheme.cpp" />
     <ClCompile Include="..\..\face_recognition_lib\global.cpp" />
     <ClCompile Include="..\..\face_recognition_lib\picture.cpp" />

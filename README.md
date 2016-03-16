@@ -11,4 +11,4 @@ It can only runs on windows at present.
 We will support it on linux when it's stable on windows.
 
 #how to build
-for windows:Just build face_recognition.sln by msvc2013 which is in code/platform/win/
+for windows:Just build code/platform/win/face_recognition.sln by msvc2013

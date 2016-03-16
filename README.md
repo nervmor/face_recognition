@@ -5,7 +5,9 @@ It can detects face in picture and recogniton the it in the picture.as a result,
 
 #what is the platform of it
 It's desgined running on both windows and linux.
+
 It can only runs on windows at present.
+
 We will support it on linux when it's stable on windows.
 
 #how to build

@@ -7,6 +7,7 @@
 #define CONTEXT_TAG							"context"
 #define PREPROCESSOR_MANAGER_TAG			"preprocessor_manager"
 #define CASCADE_DETECTOR_TAG				"cascade_detector"
+#define MUTIPLE_CASCADE_DETECTOR_TAG		"mutiple_cascade_detector"
 #define FACE_FEATURE_DETECTOR_TAG			"face_feature_detector"
 #define MODEL_RECOGNIZER_TAG				"model_recognizer"
 #define SESSION_TAG							"session"
@@ -29,7 +30,7 @@ namespace face_recognition{
 		result_already_handled,
 		result_no_face_detected,
 		result_lib_fail,
-		result_no_eyes_fetected
+		result_no_eyes_fetected,
 	};
 
 	const char* result_string(result res);

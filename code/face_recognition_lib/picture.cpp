@@ -1,5 +1,6 @@
 #include "picture.h"
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
 #include "../frame/util_string.h"
 #include "../frame/util_path.h"
 #include "../frame/util_log.h"
@@ -75,6 +76,11 @@ namespace face_recognition
 		destroy();
 	}
 
+	void picture::show(int delay)
+	{
+		cv::imshow("picture", m_data);
+		cv::waitKey(delay);
+	}
 	
 
 }

@@ -65,20 +65,20 @@ namespace face_recognition
 			util_log::log(CASCADE_DETECTOR_TAG, "picture is not CV_8U to detect cascade rect.");
 			return result_picture_invalid;
 		}
-		std::vector<cv::Rect> faces;
-		m_cascade.detectMultiScale(sp_pic_in->data(), faces,
+		std::vector<cv::Rect> detected_rect;
+		m_cascade.detectMultiScale(sp_pic_in->data(), detected_rect,
 			1.1, 2, 0
 			//|CASCADE_FIND_BIGGEST_OBJECT
 			//|CASCADE_DO_ROUGH_SEARCH
 			| cv::CASCADE_SCALE_IMAGE);
-		if (faces.empty())
+		if (detected_rect.empty())
 		{
 			util_log::logd(CASCADE_DETECTOR_TAG, "there is no cascade rect detected.");
 		}
 		else
 		{
 			std::string str_face_rect_info = "detected cascade rect -->";
-			for (std::vector<cv::Rect>::iterator it = faces.begin(); it != faces.end(); it++)
+			for (std::vector<cv::Rect>::iterator it = detected_rect.begin(); it != detected_rect.end(); it++)
 			{
 				cv::Rect& rect = *it;
 				vec_rect.push_back(pic_rect(rect.x, rect.y, rect.width, rect.height));
@@ -350,5 +350,130 @@ namespace face_recognition
 			m_model->save(util_string::w2a(str_model_file));
 		}
 		util_log::logd(MODEL_RECOGNIZER_TAG, "save model to file[%ws] success.", str_model_file.c_str());
+	}
+
+	result mutiple_cascade_detector::create(const std::vector<std::wstring>& vec_cascade_file, boost::shared_ptr<mutiple_cascade_detector>& sp_detector)
+	{
+		if (vec_cascade_file.empty())
+		{
+			return result_success;
+		}
+		result res = result_success;
+		std::vector<boost::shared_ptr<cascade_detector> > vec_sp_detector;
+		for (std::vector<std::wstring>::const_iterator it = vec_cascade_file.begin(); it != vec_cascade_file.end(); it++)
+		{
+			const std::wstring& str_cascade_file = *it;
+			boost::shared_ptr<cascade_detector> sp_cascade_detector;
+			res = cascade_detector::create(str_cascade_file, sp_cascade_detector);
+			if (res != result_success)
+			{
+				util_log::log(MUTIPLE_CASCADE_DETECTOR_TAG, "create cascade detecotr by file[%ws] fail with result[%s]", str_cascade_file.c_str(), result_string(res));
+				continue;
+			}
+			vec_sp_detector.emplace_back(sp_cascade_detector);
+		}
+		if (vec_sp_detector.empty())
+		{
+			util_log::log(MUTIPLE_CASCADE_DETECTOR_TAG, "threre is no cascade detector created.");
+			return res;
+		}
+		sp_detector = boost::make_shared<mutiple_cascade_detector>();
+		sp_detector->m_vec_sp_detector = vec_sp_detector;
+		return result_success;
+	}
+
+	void mutiple_cascade_detector::destroy()
+	{
+
+	}
+
+	void mutiple_cascade_detector::detect(boost::shared_ptr<picture> sp_pic_in, std::vector<std::pair<result, std::vector<pic_rect> > >& vec_res_vec_detected_rect)
+	{
+		for (std::vector<boost::shared_ptr<cascade_detector> >::iterator it = m_vec_sp_detector.begin(); it != m_vec_sp_detector.end(); it++)
+		{
+			boost::shared_ptr<cascade_detector> sp_detector(*it);
+
+			std::vector<pic_rect> vec_detected_rect;
+			result res = sp_detector->detect(sp_pic_in, vec_detected_rect);
+			if (res != result_success)
+			{
+				util_log::log(MUTIPLE_CASCADE_DETECTOR_TAG, "cascade detector detect fail with result[%s]", result_string(res));
+			}
+			if (!vec_detected_rect.empty())
+			{
+				vec_res_vec_detected_rect.push_back(std::make_pair(res, vec_detected_rect));
+			}
+		}
+	}
+
+	void mutiple_cascade_detector::detect_evaluat(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<pic_rect>& sp_rect)
+	{
+		std::vector<std::pair<result, std::vector<pic_rect> > > vec_res_vec_detected_rect;
+		detect(sp_pic_in, vec_res_vec_detected_rect);
+		
+		std::vector<pic_rect> vec_all_rect;
+		int64 total_acreage = 0;
+		for (std::vector<std::pair<result, std::vector<pic_rect> > >::iterator it = vec_res_vec_detected_rect.begin(); it != vec_res_vec_detected_rect.end(); it++)
+		{
+			std::pair<result, std::vector<pic_rect> >& pari_res_vec_rect = *it;
+			result res = pari_res_vec_rect.first;
+			std::vector<pic_rect>& vec_rect = pari_res_vec_rect.second;
+			if (res == result_success)
+			{
+				for (std::vector<pic_rect>::iterator itx = vec_rect.begin(); itx != vec_rect.end(); itx++)
+				{
+					pic_rect& detected_rect = *itx;
+					total_acreage += detected_rect.cacl_acreage();
+				}
+				vec_all_rect.insert(vec_all_rect.end(), vec_rect.begin(), vec_rect.end());
+			}
+		}
+		if (vec_all_rect.empty())
+		{
+			return;
+		}
+
+		boost::shared_ptr<pic_rect> sp_max_common_rect;
+		float max_common_acreage_percent = 0;
+		std::map<unsigned int, std::map<unsigned int, float> > map_statistics_common_acreage_percent;
+		for (unsigned int i = 0; i != vec_all_rect.size(); i++)
+		{
+			pic_rect& rect = vec_all_rect[i];
+			std::map<unsigned int, float> map_common_acreage_percent;
+			for (unsigned int k = 0; k != vec_all_rect.size(); k++)
+			{
+				if (k == i)
+				{
+					continue;
+				}
+				pic_rect& rect_x = vec_all_rect[k];
+				boost::shared_ptr<pic_rect> sp_common_rect;
+				if (!get_common_rect(rect, rect_x, sp_common_rect))
+				{
+					continue;
+				}
+				int64 common_acreage = sp_common_rect->cacl_acreage();
+				if (common_acreage == 0)
+				{
+					continue;
+				}
+				float percent1 = common_acreage;
+				percent1 = percent1 / rect.cacl_acreage();
+				float percent2 = common_acreage;
+				percent2 = percent2 / rect_x.cacl_acreage();
+				float average_percent = (percent1 + percent2) / 2;
+				if (average_percent > max_common_acreage_percent)
+				{
+					sp_max_common_rect = sp_common_rect;
+					max_common_acreage_percent = average_percent;
+				}
+				map_common_acreage_percent.insert(std::make_pair(k, average_percent));
+			}
+			if (!map_common_acreage_percent.empty())
+			{
+				map_statistics_common_acreage_percent.insert(std::make_pair(i, map_common_acreage_percent));
+			}
+		}
+		sp_rect = sp_max_common_rect;
 	}
 }

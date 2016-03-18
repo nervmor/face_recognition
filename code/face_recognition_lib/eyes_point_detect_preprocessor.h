@@ -23,14 +23,23 @@ namespace face_recognition
 			}
 			m_sp_feature_detector = sp_detector;
 
-			boost::shared_ptr<cascade_detector> sp_cascade_detector;
-			res = cascade_detector::create(m_str_eyes_cascade_file, sp_cascade_detector);
+			boost::shared_ptr<mutiple_cascade_detector> sp_left_eye_cascade_detector;
+			res = mutiple_cascade_detector::create(m_vec_left_eye_cascade_file, sp_left_eye_cascade_detector);
 			if (res != result_success)
 			{
-				util_log::log(EYES_POINT_DETECT_PREPROCESSOR_TAG, "eye cascade_detector create fail with result[%s]", result_string(res));
+				util_log::log(EYES_POINT_DETECT_PREPROCESSOR_TAG, "left eye mutiple_cascade_detector create fail with result[%s]", result_string(res));
 				return res;
 			}
-			m_sp_eye_cascade_detector = sp_cascade_detector;
+			m_sp_left_eye_cascade_detector = sp_left_eye_cascade_detector;
+
+			boost::shared_ptr<mutiple_cascade_detector> sp_right_eye_cascade_detector;
+			res = mutiple_cascade_detector::create(m_vec_right_eye_cascade_file, sp_right_eye_cascade_detector);
+			if (res != result_success)
+			{
+				util_log::log(EYES_POINT_DETECT_PREPROCESSOR_TAG, "right eye mutiple_cascade_detector create fail with result[%s]", result_string(res));
+				return res;
+			}
+			m_sp_right_eye_cascade_detector = sp_right_eye_cascade_detector;
 			return result_success;
 		}
 		virtual result process(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<context> sp_ctx, boost::shared_ptr<picture>& sp_pic_out)
@@ -98,11 +107,13 @@ namespace face_recognition
 			face_rect.height = sp_face_rect->_height;
 
 			cv::Mat face = cv::Mat(sp_pic_in->data(), face_rect);
+			cv::imshow("face", face);
+			cv::waitKey();
 			const float EYE_SX = 0.16f;//x
 			const float EYE_SY = 0.26f;//y
 			const float EYE_SW = 0.30f;//width
 			const float EYE_SH = 0.28f;//height
-
+			
 			int leftX = cvRound(face.cols * EYE_SX);
 			int topY = cvRound(face.rows * EYE_SY);
 			int widthX = cvRound(face.cols * EYE_SW);
@@ -116,12 +127,7 @@ namespace face_recognition
 			boost::shared_ptr<picture> sp_face_right_eye = picture::create(topRightOfFace);
 	
 			boost::shared_ptr<pic_rect> sp_left_eye_rect;
-			res = m_sp_eye_cascade_detector->detect_largest(sp_face_left_eye, sp_left_eye_rect);
-			if (res != result_success)
-			{
-				util_log::log(EYES_POINT_DETECT_PREPROCESSOR_TAG, "eye cascade_detector detect_largest fail with result[%s]", result_string(res));
-				return res;
-			}
+			m_sp_left_eye_cascade_detector->detect_evaluat(sp_face_left_eye, sp_left_eye_rect);
 			if (!sp_left_eye_rect)
 			{
 				util_log::log(EYES_POINT_DETECT_PREPROCESSOR_TAG, "eye cascade_detector detect no left eye");
@@ -129,12 +135,7 @@ namespace face_recognition
 			}
 
 			boost::shared_ptr<pic_rect> sp_right_eye_rect;
-			res = m_sp_eye_cascade_detector->detect_largest(sp_face_right_eye, sp_right_eye_rect);
-			if (res != result_success)
-			{
-				util_log::log(EYES_POINT_DETECT_PREPROCESSOR_TAG, "eye cascade_detector detect_largest fail with result[%s]", result_string(res));
-				return res;
-			}
+			m_sp_right_eye_cascade_detector->detect_evaluat(sp_face_right_eye, sp_right_eye_rect);
 			if (!sp_right_eye_rect)
 			{
 				util_log::log(EYES_POINT_DETECT_PREPROCESSOR_TAG, "eye cascade_detector detect no right eye");
@@ -172,9 +173,11 @@ namespace face_recognition
 			return result_success;
 		}
 	public:
-		eyes_point_detect_preprocessor(const std::wstring& str_eyes_cascade_file,
+		eyes_point_detect_preprocessor(const std::vector<std::wstring>& vec_left_eye_cascade_file,
+			const std::vector<std::wstring>& vec_right_eye_cascade_file,
 			const std::wstring& str_flandmark_model_file)
-			: m_str_eyes_cascade_file(str_eyes_cascade_file)
+			: m_vec_left_eye_cascade_file(vec_left_eye_cascade_file)
+			, m_vec_right_eye_cascade_file(vec_right_eye_cascade_file)
 			, m_str_flandmark_model_file(str_flandmark_model_file)
 		{
 
@@ -182,9 +185,11 @@ namespace face_recognition
 		~eyes_point_detect_preprocessor()
 		{}
 	private:
-		std::wstring m_str_eyes_cascade_file;
+		std::vector<std::wstring> m_vec_left_eye_cascade_file;
+		std::vector<std::wstring> m_vec_right_eye_cascade_file;
 		std::wstring m_str_flandmark_model_file;
 		boost::shared_ptr<face_feature_detector> m_sp_feature_detector;
-		boost::shared_ptr<cascade_detector> m_sp_eye_cascade_detector;
+		boost::shared_ptr<mutiple_cascade_detector> m_sp_left_eye_cascade_detector;
+		boost::shared_ptr<mutiple_cascade_detector> m_sp_right_eye_cascade_detector;
 	};
 }

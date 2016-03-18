@@ -19,6 +19,7 @@ namespace face_recognition
 		unsigned int depth();
 		cv::Mat& data();
 		IplImage image();
+		void show(int delay);
 	private:
 		cv::Mat m_data;
 	public:

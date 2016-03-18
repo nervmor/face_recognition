@@ -125,14 +125,14 @@ namespace face_recognition
 		static result mask(boost::shared_ptr<picture> sp_pic_in, const pic_area& area, boost::shared_ptr<picture>& sp_pic_out);
 	};
 
-	class contours_detector
+	class contours_detector : public boost::noncopyable
 	{
 	public:
 		static result detect_contours(boost::shared_ptr<picture> sp_pic_in, std::vector<pic_area>& vec_pic_area);
 	};
 
 
-	class cascade_detector
+	class cascade_detector : public boost::noncopyable
 	{
 	public:
 		static result create(const std::wstring& str_cascade_file, boost::shared_ptr<cascade_detector>& sp_detector);
@@ -143,6 +143,48 @@ namespace face_recognition
 		cv::CascadeClassifier m_cascade;
 	public:
 		~cascade_detector()
+		{
+			destroy();
+		}
+	};
+
+	class mutiple_cascade_detector : public boost::noncopyable
+	{
+	public:
+		static result create(const std::vector<std::wstring>& vec_cascade_file, boost::shared_ptr<mutiple_cascade_detector>& sp_detector);
+		void destroy();
+		void detect(boost::shared_ptr<picture> sp_pic_in, std::vector<std::pair<result, std::vector<pic_rect> > >& vec_res_vec_detected_rect);
+		void detect_evaluat(boost::shared_ptr<picture> sp_pic_in, boost::shared_ptr<pic_rect>& sp_rect);
+	private:
+		static bool get_common_rect(const pic_rect& rect1, const pic_rect& rect2, boost::shared_ptr<pic_rect>& sp_common_rect)
+		{
+			if (rect1._x + rect1._width < rect2._x)
+			{
+				return false;
+			}
+			if (rect1._x > rect2._x + rect2._width)
+			{
+				return false;
+			}
+			if (rect1._y + rect1._height < rect2._y)
+			{
+				return false;
+			}
+			if (rect1._y > rect2._y + rect2._height)
+			{
+				return false;
+			}
+			unsigned int common_x1 = rect1._x > rect2._x ? rect1._x : rect2._x;
+			unsigned int common_x2 = rect1._x + rect1._width < rect2._x + rect2._width ? rect1._x + rect1._width : rect2._x + rect2._width;
+			unsigned int common_y1 = rect1._y > rect2._y ? rect1._y : rect2._y;
+			unsigned int common_y2 = rect1._y + rect1._height < rect2._y + rect2._height ? rect1._y + rect1._height : rect2._y + rect2._height;
+			sp_common_rect = boost::make_shared<pic_rect>(common_x1, common_y1, common_x2 - common_x1, common_y2 - common_y1);
+			return true;
+		}
+	private:
+		std::vector<boost::shared_ptr<cascade_detector>> m_vec_sp_detector;
+	public:
+		~mutiple_cascade_detector()
 		{
 			destroy();
 		}
@@ -166,7 +208,7 @@ namespace face_recognition
 		FLANDMARK_Model* m_p_model;
 	};
 
-	class model_recognizer
+	class model_recognizer : public boost::noncopyable
 	{
 	public:
 		enum recognizer_type

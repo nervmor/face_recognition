@@ -15,13 +15,15 @@
 namespace face_recognition
 {
 	result scheme::train(const std::wstring& str_train_pic_dir,
-		const std::wstring& str_face_cascade_file, const std::wstring& str_eye_cascade_file,
+		const std::vector<std::wstring>& vec_face_cascade_file, 
+		const std::vector<std::wstring>& vec_left_eye_cascade_file,
+		const std::vector<std::wstring>& vec_right_eye_cascade_file,
 		const std::wstring& str_flandmark_model_file,
 		unsigned int size_align_length)
 	{
 		boost::shared_ptr<preprocessor> sp_gray_preprocessor = preprocessor_factroy::create_preprocessor<gray_preprocessor>();
-		boost::shared_ptr<preprocessor> sp_face_area_detect_preprocessor = preprocessor_factroy::create_preprocessor<face_area_detect_preprocessor>(str_face_cascade_file);
-		boost::shared_ptr<preprocessor> sp_eyes_point_detect_preprocessor = preprocessor_factroy::create_preprocessor<eyes_point_detect_preprocessor>(str_eye_cascade_file, str_flandmark_model_file);
+		boost::shared_ptr<preprocessor> sp_face_area_detect_preprocessor = preprocessor_factroy::create_preprocessor<face_area_detect_preprocessor>(vec_face_cascade_file);
+		boost::shared_ptr<preprocessor> sp_eyes_point_detect_preprocessor = preprocessor_factroy::create_preprocessor<eyes_point_detect_preprocessor>(vec_left_eye_cascade_file, vec_right_eye_cascade_file, str_flandmark_model_file);
 		boost::shared_ptr<preprocessor> sp_face_align_preprocessor = preprocessor_factroy::create_preprocessor<face_align_preprocessor>(size_align_length);
 		boost::shared_ptr<preprocessor> sp_equalization_preprocessor = preprocessor_factroy::create_preprocessor<equalization_preprocessor>();
 

@@ -24,6 +24,7 @@ namespace face_recognition
 		}
 		util_log::logd(PREPROCESSOR_MANAGER_TAG, "add_preprocessor[%ws].", sp_preprocessor->name().c_str());
 		m_vec_preprocessor.push_back(sp_preprocessor);
+		return result_success;
 	}
 
 	result preprocessor_manager::process(boost::shared_ptr<picture> sp_pic_in, const std::wstring& str_pic_filename, boost::shared_ptr<picture>& sp_pic_out)

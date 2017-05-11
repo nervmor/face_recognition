@@ -69,8 +69,12 @@
       <ProgramDatabaseFile>$(OutDir)\pdb\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>after_build.bat debug</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>..\..\script\prepare.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -94,6 +98,9 @@
       <OutputFile>$(OutDir)\exec\$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>..\..\third\boost_1_58_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>..\..\script\prepare.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\face_recognition\main.cpp" />
